@@ -966,7 +966,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "es-gui"
+name = "indexly"
 version = "0.1.0"
 dependencies = [
  "regex",

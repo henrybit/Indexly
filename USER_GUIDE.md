@@ -1,6 +1,6 @@
-# ES GUI 使用说明书
+# Indexly 使用说明书
 
-ES GUI 是一款基于 **Tauri 2.x + Vite + React + TypeScript** 构建的 Elasticsearch 桌面管理工具，支持连接 Elasticsearch 7.x / 8.x 集群并进行索引管理。
+Indexly 是一款基于 **Tauri 2.x + Vite + React + TypeScript** 构建的 Elasticsearch 桌面索引管理工具，支持连接 Elasticsearch 7.x / 8.x 集群并进行索引检索、删除与过期清理。产品能力总览见 [`PRODUCT.md`](PRODUCT.md)。
 
 ---
 
@@ -19,9 +19,10 @@ ES GUI 是一款基于 **Tauri 2.x + Vite + React + TypeScript** 构建的 Elast
 
 | 功能 | 说明 |
 |------|------|
-| 连接 Elasticsearch | 支持 HTTP/HTTPS 协议、Basic Auth 认证、可选跳过证书校验 |
+| 连接 Elasticsearch | 支持 HTTP/HTTPS 协议、Basic Auth 认证、可选跳过证书校验；可保存并切换多套集群 |
 | 索引搜索 | 按名称搜索索引，支持 `*` 和 `?` 通配符 |
 | 索引删除 | 勾选待删除索引，二次确认后删除，禁止全量删除 |
+| 索引过期 | 按正则匹配索引名与保留时长，预览后清理过期索引 |
 
 ---
 
@@ -123,9 +124,16 @@ npm run tauri build
 
 ---
 
-## Expiration（过期）功能
+## 索引过期
 
-应用主界面下方设有 **Expiration** 面板，用于展示索引生命周期相关信息（具体功能以实际界面为准）。
+应用主界面下方设有 **索引过期** 面板：
+
+1. 为当前集群新建规则：填写名称、索引名正则、保留时长（天 / 小时）
+2. 可选跳过以 `.` 开头的系统索引，并可随时启用 / 停用规则
+3. 点击 **预览匹配**，查看命中索引及是否已过期
+4. 确认无误后点击 **清理过期**，二次确认后仅删除已过期项
+
+规则按集群分别保存在本机本地。
 
 ---
 

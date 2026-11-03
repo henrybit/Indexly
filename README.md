@@ -1,12 +1,16 @@
-# ES GUI
+# Indexly
 
-基于 **Tauri 2.x + Vite + React + TypeScript** 的 Elasticsearch 7 / 8 桌面管理工具。
+基于 **Tauri 2.x + Vite + React + TypeScript** 的 Elasticsearch 7 / 8 桌面索引管理工具。
+
+产品功能与特点说明见 [`PRODUCT.md`](PRODUCT.md)。
 
 ## 功能
 
 - 连接 Elasticsearch 7.x / 8.x（HTTP / HTTPS、Basic Auth、可选跳过证书校验）
+- 多集群配置保存与切换
 - 按名称搜索 indices（支持 `*` / `?` 通配符）
 - 勾选并删除指定索引（带确认框，禁止 `*` / `_all` 全量删除）
+- 按正则 + 保留时长预览并清理过期索引
 
 ## 开发
 

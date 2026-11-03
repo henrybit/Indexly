@@ -1,12 +1,12 @@
 [package]
-name = "es-gui"
+name = "indexly"
 version = "0.1.0"
-description = "Elasticsearch 7/8 desktop manager"
+description = "Indexly — Elasticsearch 7/8 desktop index manager"
 authors = ["you"]
 edition = "2021"
 
 [lib]
-name = "es_gui_lib"
+name = "indexly_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

@@ -73,9 +73,9 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: ES GUI ${{ github.ref_name }}
+          releaseName: Indexly ${{ github.ref_name }}
           releaseBody: |
-            ## ES GUI ${{ github.ref_name }}
+            ## Indexly ${{ github.ref_name }}
 
             下载对应平台安装包：
 
@@ -86,7 +86,7 @@ jobs:
             | macOS (Intel) | `.dmg` / `.app.tar.gz` (x86_64) |
             | Linux | `.deb` / `.AppImage` |
 
-            安装说明见仓库 `USER_GUIDE.md`。
+            产品说明见 `PRODUCT.md`，安装与使用见 `USER_GUIDE.md`。
           releaseDraft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
           args: ${{ matrix.args }}

@@ -3,8 +3,9 @@ import {
   type ClusterProfile,
 } from "../types/es";
 
-const STORE_KEY = "es-gui:clusters";
-const LEGACY_KEY = "es-gui:last-connection";
+const STORE_KEY = "indexly:clusters";
+const LEGACY_STORE_KEYS = ["es-gui:clusters"] as const;
+const LEGACY_CONNECTION_KEY = "es-gui:last-connection";
 
 export type ClusterStore = {
   profiles: ClusterProfile[];
@@ -20,27 +21,24 @@ type LegacyConnection = {
 };
 
 export function loadClusterStore(): ClusterStore {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as ClusterStore;
-      const profiles = Array.isArray(parsed.profiles)
-        ? parsed.profiles.map(normalizeProfile).filter((item) => item.host)
-        : [];
-      const activeId =
-        parsed.activeId && profiles.some((item) => item.id === parsed.activeId)
-          ? parsed.activeId
-          : (profiles[0]?.id ?? null);
-      return { profiles, activeId };
-    }
-  } catch {
-    // Fall through to legacy migration.
+  const fromCurrent = readStore(STORE_KEY);
+  if (fromCurrent) {
+    return fromCurrent;
   }
 
-  const migrated = migrateLegacyConnection();
-  if (migrated) {
-    saveClusterStore(migrated);
-    return migrated;
+  for (const key of LEGACY_STORE_KEYS) {
+    const migrated = readStore(key);
+    if (migrated) {
+      saveClusterStore(migrated);
+      localStorage.removeItem(key);
+      return migrated;
+    }
+  }
+
+  const fromLegacyConnection = migrateLegacyConnection();
+  if (fromLegacyConnection) {
+    saveClusterStore(fromLegacyConnection);
+    return fromLegacyConnection;
   }
 
   return { profiles: [], activeId: null };
@@ -50,9 +48,29 @@ export function saveClusterStore(store: ClusterStore) {
   localStorage.setItem(STORE_KEY, JSON.stringify(store));
 }
 
+function readStore(key: string): ClusterStore | null {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as ClusterStore;
+    const profiles = Array.isArray(parsed.profiles)
+      ? parsed.profiles.map(normalizeProfile).filter((item) => item.host)
+      : [];
+    const activeId =
+      parsed.activeId && profiles.some((item) => item.id === parsed.activeId)
+        ? parsed.activeId
+        : (profiles[0]?.id ?? null);
+    return { profiles, activeId };
+  } catch {
+    return null;
+  }
+}
+
 function migrateLegacyConnection(): ClusterStore | null {
   try {
-    const raw = localStorage.getItem(LEGACY_KEY);
+    const raw = localStorage.getItem(LEGACY_CONNECTION_KEY);
     if (!raw) {
       return null;
     }
@@ -64,7 +82,7 @@ function migrateLegacyConnection(): ClusterStore | null {
       ...legacy,
       password: "",
     });
-    localStorage.removeItem(LEGACY_KEY);
+    localStorage.removeItem(LEGACY_CONNECTION_KEY);
     return { profiles: [profile], activeId: profile.id };
   } catch {
     return null;

@@ -26,7 +26,7 @@ impl EsClient {
         let http = Client::builder()
             .timeout(REQUEST_TIMEOUT)
             .danger_accept_invalid_certs(config.skip_ssl_verify)
-            .user_agent("es-gui/0.1")
+            .user_agent("Indexly/0.1")
             .build()
             .map_err(|err| AppError::msg(format!("创建 HTTP 客户端失败：{err}")))?;
 

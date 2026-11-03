@@ -11,10 +11,10 @@ export function AppShell({ sidebar, children }: AppShellProps) {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark">ES</span>
+          <span className="brand-mark">Ix</span>
           <div>
-            <h1>ES GUI</h1>
-            <p>Elasticsearch 7 / 8 桌面管理工具</p>
+            <h1>Indexly</h1>
+            <p>Elasticsearch 索引桌面管理</p>
           </div>
         </div>
         <ClusterSwitcher />
