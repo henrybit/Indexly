@@ -1,10 +1,10 @@
 name: Release
 
-# 推送版本 tag（如 v0.1.0）时编译并发布 Windows / macOS / Linux 安装包
+# 推送任意 tag 时编译并发布 Windows / macOS / Linux 安装包
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
 
 jobs:
   publish:

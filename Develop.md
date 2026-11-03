@@ -40,7 +40,7 @@ src-tauri/           Tauri 2 + Rust backend
 
 ## CI release (GitHub Actions)
 
-Pushing a `v*` tag runs [`.github/workflows/release.yml`](.github/workflows/release.yml) and uploads GitHub Release assets for:
+Pushing **any** git tag runs [`.github/workflows/release.yml`](.github/workflows/release.yml) and uploads GitHub Release assets for:
 
 - Windows (`windows-latest`)
 - macOS Apple Silicon / Intel (`macos-latest`, `aarch64-apple-darwin` / `x86_64-apple-darwin`)
@@ -49,11 +49,11 @@ Pushing a `v*` tag runs [`.github/workflows/release.yml`](.github/workflows/rele
 Example:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag 0.1.0
+git push origin 0.1.0
 ```
 
-Tags containing `-` (e.g. `v0.1.0-beta.1`) are marked as prerelease.
+Tags containing `-` (e.g. `0.1.0-beta.1` or `v0.1.0-rc.1`) are marked as prerelease.
 
 ### Repository secrets (macOS signing & notarization)
 
