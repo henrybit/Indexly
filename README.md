@@ -1,75 +1,96 @@
 # Indexly
 
-基于 **Tauri 2.x + Vite + React + TypeScript** 的 Elasticsearch 7 / 8 桌面索引管理工具。
+**Indexly** is a lightweight desktop app for managing Elasticsearch 7.x / 8.x indices. Connect to clusters on your machine, search indices quickly, delete with safeguards, and clean up expired indices with preview-first TTL rules.
 
-产品功能与特点说明见 [`PRODUCT.md`](PRODUCT.md)。
+[简体中文](README.zh-CN.md) · [User guide](USER_GUIDE.md) · [Product details](PRODUCT.md) · [Development](Develop.md)
 
-## 功能
+---
 
-- 连接 Elasticsearch 7.x / 8.x（HTTP / HTTPS、Basic Auth、可选跳过证书校验）
-- 多集群配置保存与切换
-- 按名称搜索 indices（支持 `*` / `?` 通配符）
-- 勾选并删除指定索引（带确认框，禁止 `*` / `_all` 全量删除）
-- 按正则 + 保留时长预览并清理过期索引
+## Why Indexly
 
-## 开发
+Indexly is **not** a Kibana replacement. It does not try to cover dashboards, Discover, or full cluster ops. It focuses on the index lifecycle tasks people do most often—and the ones that hurt most when done wrong:
 
-需要安装 [Node.js](https://nodejs.org/) 和 [Rust](https://www.rust-lang.org/)。
+- Switch between multiple clusters without retyping configs
+- Find indices fast in large clusters
+- Delete only what you explicitly select
+- Preview TTL matches before cleaning expired indices
 
-```bash
-npm install
-npm run tauri dev
-```
+Runs locally on **Windows**, **macOS**, and **Linux**. No management server to deploy.
 
-打包桌面应用：
+---
 
-```bash
-npm run tauri build
-```
+## Features
 
-## CI 发布（GitHub Actions）
+### Multi-cluster connections
 
-推送符合 `v*` 的 tag 时，工作流 [`.github/workflows/release.yml`](.github/workflows/release.yml) 会并行构建并上传 GitHub Release 产物：
+- Save multiple cluster profiles and switch the active one in one click
+- HTTP / HTTPS
+- Basic Auth
+- Optional skip TLS verification for self-signed or lab environments
+- Shows cluster name and version; warns when the major version is outside 7 / 8
+- Connection settings stay on your machine; TTL rules are isolated per cluster
 
-- Windows（`windows-latest`）
-- macOS Apple Silicon / Intel（`macos-latest`，分别打 `aarch64-apple-darwin` / `x86_64-apple-darwin`）
-- Linux（`ubuntu-22.04`）
+### Index search & overview
 
-示例：
+- Search by index name with `*` / `?` wildcards (e.g. `log-*`, `index_?`)
+- Table view for health, status, shards, docs, and store size
+- Built for quickly locating targets before delete or cleanup
 
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
+### Safe index deletion
 
-含 `-` 的 tag（如 `v0.1.0-beta.1`）会标记为预发布。
+- Multi-select delete with a confirmation step
+- Blocks dangerous bulk patterns such as `*` and `_all`
+- You must pick concrete indices—no wildcard wipe path
+- Reports deleted vs failed items (permissions, read-only blocks, etc.)
 
-### 仓库 Secrets（macOS 签名与公证）
+### Expiration / TTL cleanup
 
-在 GitHub 仓库 **Settings → Secrets and variables → Actions** 中配置：
+- Rules stored per active cluster
+- Match index names with regular expressions
+- Retention in days or hours, based on index creation time
+- Optionally skip system indices (names starting with `.`)
+- Enable, disable, edit, or remove rules
+- **Preview matches** before any delete
+- **Clean expired** only removes indices that both match and are past TTL, with another confirmation
 
-| Secret | 说明 |
+---
+
+## Highlights
+
+| | |
 | --- | --- |
-| `APPLE_CERTIFICATE` | Developer ID Application 证书导出的 `.p12` 的 base64（`openssl base64 -A -in cert.p12 -out cert.txt`） |
-| `APPLE_CERTIFICATE_PASSWORD` | 导出 `.p12` 时设置的密码 |
-| `APPLE_SIGNING_IDENTITY` | 可选；codesign 身份名，例如 `Developer ID Application: Your Name (TEAMID)`。不填时可由证书推断 |
-| `APPLE_ID` | Apple ID 邮箱 |
-| `APPLE_PASSWORD` | [App 专用密码](https://appleid.apple.com/account/manage)（非登录密码） |
-| `APPLE_TEAM_ID` | [Apple Developer 会员信息](https://developer.apple.com/account) 中的 Team ID |
+| **Lightweight desktop** | Local app, direct cluster access, no extra control plane |
+| **Safety first** | Confirmations, no full-wipe shortcuts, preview before TTL cleanup |
+| **Multi-environment** | Dev / test / prod profiles without rewriting connection forms |
+| **Cross-platform** | Same workflow on Windows, macOS, and Linux |
+| **Index-focused** | Connect → search → delete / expire as one clear path |
 
-未配置这些 Secrets 时，macOS 仍可构建，但不会完成正式签名/公证；分发到其他 Mac 时可能被 Gatekeeper 拦截。Windows / Linux 构建不依赖上述 Secrets。
+---
 
-仓库需开启 Actions 的 **Read and write permissions**（Settings → Actions → General → Workflow permissions），以便 `tauri-action` 创建/更新 Release。
+## Good fit for
 
-## 项目结构
+1. **Day-to-day triage** — find oversized or unexpected indices with wildcards  
+2. **Environment hopping** — jump between lab and staging clusters  
+3. **Log index cleanup** — e.g. keep `logs-YYYY.MM.DD` for 7 days, preview, then clean  
+4. **Mistake reduction** — force explicit index selection instead of careless wildcards  
 
-```text
-src/                 Vite 前端（组件化）
-  components/        UI 组件：连接、索引、通用控件
-  context/           连接状态
-  hooks/             索引查询与删除逻辑
-  services/          调用 Tauri Rust 命令
-src-tauri/           Tauri 2 后端
-  src/es/            Elasticsearch HTTP 客户端
-  src/commands/      连接 / 搜索 / 删除命令
-```
+---
+
+## What it does not do (yet)
+
+- Kibana-style visualization, Discover, or dashboards
+- Arbitrary Query DSL / SQL consoles
+- Full node / shard allocation / ILM policy administration
+- Cloud accounts or remote policy sync (everything stays local)
+- Enterprise secret vaulting — protect the OS account that holds credentials
+
+---
+
+## Download
+
+Installers are published on [GitHub Releases](../../releases) for Windows, macOS (Apple Silicon & Intel), and Linux.
+
+For step-by-step usage, see [USER_GUIDE.md](USER_GUIDE.md).  
+For building from source or release CI, see [Develop.md](Develop.md).
+
+**Version:** 0.1.0 · **Targets:** Elasticsearch 7.x / 8.x

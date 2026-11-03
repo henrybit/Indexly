@@ -110,4 +110,4 @@ Indexly **不是** 完整的 Kibana 替代品，也不做可视化看板或复�
 - 当前版本：0.1.0  
 - 兼容目标：Elasticsearch 7.x / 8.x  
 
-更细的操作步骤见 [`USER_GUIDE.md`](USER_GUIDE.md)；开发与发布说明见 [`README.md`](README.md)。
+更细的操作步骤见 [`USER_GUIDE.md`](USER_GUIDE.md)；产品简介见 [`README.md`](README.md) / [`README.zh-CN.md`](README.zh-CN.md)；开发与发布说明见 [`Develop.md`](Develop.md)。

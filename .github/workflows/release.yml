@@ -86,7 +86,7 @@ jobs:
             | macOS (Intel) | `.dmg` / `.app.tar.gz` (x86_64) |
             | Linux | `.deb` / `.AppImage` |
 
-            产品说明见 `PRODUCT.md`，安装与使用见 `USER_GUIDE.md`。
+            Product overview: `README.md` / `README.zh-CN.md`. Details: `PRODUCT.md`. Usage: `USER_GUIDE.md`.
           releaseDraft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
           args: ${{ matrix.args }}

@@ -1,6 +1,6 @@
 # Indexly 使用说明书
 
-Indexly 是一款基于 **Tauri 2.x + Vite + React + TypeScript** 构建的 Elasticsearch 桌面索引管理工具，支持连接 Elasticsearch 7.x / 8.x 集群并进行索引检索、删除与过期清理。产品能力总览见 [`PRODUCT.md`](PRODUCT.md)。
+Indexly 是一款 Elasticsearch 桌面索引管理工具，支持连接 Elasticsearch 7.x / 8.x 集群并进行索引检索、删除与过期清理。产品简介见 [`README.zh-CN.md`](README.zh-CN.md)，能力总览见 [`PRODUCT.md`](PRODUCT.md)；从源码开发与发布见 [`Develop.md`](Develop.md)。
 
 ---
 
