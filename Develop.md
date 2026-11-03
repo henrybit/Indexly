@@ -11,9 +11,11 @@ Build, run, and release Indexly from source. Product overview: [README.md](READM
 ## Develop
 
 ```bash
-npm install
+npm ci   # or: npm install
 npm run tauri dev
 ```
+
+Keep `@tauri-apps/*` (npm) and `tauri` / `tauri-plugin-*` (Cargo) on the **same major.minor**. After bumping either side, update both `package-lock.json` and `src-tauri/Cargo.lock`.
 
 ## Build installers
 
